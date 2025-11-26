@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    ports:
+      - "5432:5432"   # <--- NEW: Postgres exposed to host
+    networks:
+      - pipeline
+
+  dagster:
+    image: python:3.10
+    working_dir: /app
+    command: bash -c "pip install dagster dagster-webserver psycopg2 pandas yfinance && dagster-webserver -f dagester_jobs.py -h 0.0.0.0 -p 3000"
+    volumes:
+      - ./pipeline:/app
+      - ./.env:/app/.env
+    ports:
+      - "3000:3000"   # Dagster UI
+    networks:
+      - pipeline
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
+
+networks:
+  pipeline:
