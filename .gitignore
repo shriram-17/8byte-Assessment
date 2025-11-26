@@ -1,0 +1,40 @@
+# ---------------------
+# Python
+# ---------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.env
+.venv/
+venv/
+env/
+
+# ---------------------
+# IDE / Editor Files
+# ---------------------
+.vscode/
+.idea/
+*.swp
+
+# ---------------------
+# OS metadata
+# ---------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------
+# Docker / Build Artifacts
+# ---------------------
+pgdata/
+docker-data/
+*.log
+
+# ---------------------
+# Dagster Artifacts
+# ---------------------
+dagster_home/
+dagster_storage/
+dagster_logs/
+run_history/

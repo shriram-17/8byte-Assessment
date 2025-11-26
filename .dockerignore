@@ -1,0 +1,29 @@
+# Ignore Git repo metadata
+.git
+.gitignore
+
+# Ignore virtualenv
+venv/
+.env
+*.env
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore data, logs, and DB storage
+pgdata/
+*.log
+dagster_home/
+dagster_logs/
+dagster_storage/
+
+# Ignore OS/system files
+.DS_Store
+Thumbs.db
+
+# Do NOT include unnecessary files inside container
+README.md
+init_db.sql
