@@ -7,23 +7,27 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      TZ: UTC
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     ports:
-      - "5432:5432"   # <--- NEW: Postgres exposed to host
+      - "5432:5432"
     networks:
       - pipeline
 
   dagster:
     image: python:3.10
     working_dir: /app
-    command: bash -c "pip install dagster dagster-webserver psycopg2 pandas yfinance && dagster-webserver -f dagester_jobs.py -h 0.0.0.0 -p 3000"
+    command: >
+      bash -c "pip install dagster dagster-webserver psycopg2-binary pandas yfinance &&
+               dagster dev -f dagster_job.py -h 0.0.0.0 -p 3000"
     volumes:
       - ./pipeline:/app
-      - ./.env:/app/.env
+    env_file:
+      - .env
     ports:
-      - "3000:3000"   # Dagster UI
+      - "3000:3000"
     networks:
       - pipeline
     depends_on:
